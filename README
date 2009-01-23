@@ -1,0 +1,30 @@
+RjsAssertions
+=============
+
+Does fuzzy testing on RJS templates. Not recommended for mission-critical uses just yet as there's still some edge cases and a total lack of unit tests.
+
+Uses the same syntax as the usual page.* methods, prefixed with 'assert_rjs'. Any optional arguments will only be tested if specified in the assert_rjs call. Testing is done with the === operator, so you can use regexes, ranges, etc.
+
+http://twofiftyfive.net/2009/01/testing-rjs-in-rails/
+
+Examples
+=======
+
+RJS template:
+page.visual_effect :appear, 'element_id', :duration => 2.0
+
+Functional test:
+post :create, :format => 'js', :post => { :title => 'A title' }
+assert_rjs :visual_effect, :appear, 'element_id'
+
+
+RJS template:
+page.replace_html "name_inplace_label", :text => @user.name
+page.visual_effect :highlight, "name_inplace_label", :duration => 0.5, :startcolor => '33FF33'
+
+Functional test:
+post :user, :format => 'js', :user => { :name => 'Rozalin' }
+assert_rjs :replace_html, 'name_inplace_label', /Rozalin/
+assert_rjs :visual_effect, :highlight, 'name_inplace_label', :duration => 0.25..5.0
+
+Copyright (c) 2009 Luke Mcildoon, released under the MIT license
